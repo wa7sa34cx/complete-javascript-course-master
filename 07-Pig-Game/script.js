@@ -1,10 +1,17 @@
+// https://pig-game-v2.netlify.app/
+
 'use strict';
+
+// ----------
+// Variables
+// ----------
+const maxScore = 20;
+let player, playing, turn, dice;
+let players = [];
 
 // --------
 // Players
 // --------
-let players = [];
-
 for (let i = 0; i < 2; i++) {
   players.push({
     element: document.querySelector('.player--' + i),
@@ -20,14 +27,10 @@ for (let i = 0; i < 2; i++) {
   });
 }
 
-// console.log(players);
-// players[0].score.element.textContent = 47;
-// console.log(players[0].score.element);
-
 // -----
 // Dice
 // -----
-let dice = {
+dice = {
   element: document.querySelector('.dice'),
   value: 0,
 };
@@ -40,23 +43,17 @@ const btnRoll = document.querySelector('.btn--roll');
 const btnHold = document.querySelector('.btn--hold');
 
 // --------------------
-// Starting conditions
+// Initialize Game
 // --------------------
-// Reset display values
-for (let i = 0; i < 2; i++) {
-  setElementValue(players[i].score.element, 0);
-  setElementValue(players[i].currentScore.element, 0);
-}
-// Hide dice
-dice.element.classList.add('hidden');
-// First turn for Player 1
-let turn = 0;
-let player = players[turn];
+initGame();
 
 // ----------
 // Roll dice
 //-----------
 btnRoll.addEventListener('click', function () {
+  // 0. Do we playing?
+  if (!playing) return;
+
   // 1. Generate random dice roll
   dice.value = rollDice();
   // console.log(dice);
@@ -82,17 +79,15 @@ btnRoll.addEventListener('click', function () {
 // Hold score
 //------------
 btnHold.addEventListener('click', function () {
-  // 0. Do we have a winner?
-  if (player.score.value >= 100) {
-    return;
-  }
+  // 0. Do we playing?
+  if (!playing) return;
 
   // 1. Add current score to total score and diplay
   player.score.value += player.currentScore.value;
   setElementValue(player.score.element, player.score.value);
 
   // 2. Check for winning
-  if (player.score.value >= 100) {
+  if (player.score.value >= maxScore) {
     // console.log(player.name + ' win!');
 
     // change background copor
@@ -101,6 +96,9 @@ btnHold.addEventListener('click', function () {
 
     // Hide dice
     dice.element.classList.add('hidden');
+
+    // Stop the game
+    playing = false;
 
     return;
   }
@@ -113,19 +111,7 @@ btnHold.addEventListener('click', function () {
 // Reset game
 //------------
 btnNew.addEventListener('click', function () {
-  // reset scores
-  for (let i = 0; i < 2; i++) {
-    player = players[i];
-    player.score.value = 0;
-    player.currentScore.value = 0;
-    setElementValue(player.score.element, 0);
-    setElementValue(player.currentScore.element, 0);
-  }
-  // hide dice
-  dice.element.classList.add('hidden');
-  // get first turn to Player 1
-  turn = 0;
-  player = players[turn];
+  initGame();
 });
 
 // -------------------------------
@@ -144,7 +130,7 @@ function setElementValue(element, value) {
 
 function switchPlayer() {
   turn = turn ? 0 : 1;
-  console.log(turn);
+  // console.log(turn);
 
   // reset current score
   player.currentScore.value = 0;
@@ -154,4 +140,28 @@ function switchPlayer() {
   // change player
   player = players[turn];
   player.element.classList.add('player--active');
+}
+
+function initGame() {
+  // reset scores
+  for (let i = 0; i < 2; i++) {
+    player = players[i];
+    player.score.value = 0;
+    player.currentScore.value = 0;
+    setElementValue(player.score.element, 0);
+    setElementValue(player.currentScore.element, 0);
+    player.element.classList.remove('player--winner');
+    player.element.classList.remove('player--active');
+  }
+
+  // hide dice
+  dice.element.classList.add('hidden');
+
+  // get first turn to Player 1
+  turn = 0;
+  player = players[turn];
+  player.element.classList.add('player--active');
+
+  // Start the game
+  playing = true;
 }
