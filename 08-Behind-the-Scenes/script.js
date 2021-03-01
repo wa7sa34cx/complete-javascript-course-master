@@ -66,6 +66,7 @@ const goo = foo.calcLoo;
 goo();
 */
 
+/*
 var cooka = 'Matilda';
 
 const foo = {
@@ -112,3 +113,33 @@ const arrFunc = (a, b) => {
 };
 
 arrFunc(2, 6);
+*/
+
+// Primitives vs Objects
+
+/*
+const me = {
+  name: 'Alex',
+  age: 199,
+};
+
+const friend = me;
+friend.age = 200;
+
+console.log(me.age, friend.age);
+*/
+
+// Copying objects
+const olivia = {
+  firstName: 'Olivia',
+  lastName: 'Black',
+  age: 27,
+  family: ['Alex', 'Mike', 'John'],
+};
+
+const manilla = Object.assign({}, olivia); // !!!!!!!!
+manilla.lastName = 'Cook';
+console.log(olivia, manilla);
+
+manilla.family.push('Mike');
+console.log(olivia, manilla);
