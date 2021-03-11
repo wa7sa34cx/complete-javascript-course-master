@@ -33,3 +33,33 @@ console.log(...arr, ...arr2);
 
 // Join
 console.log(letters.join(' - '));
+
+// forEach
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+movements.forEach((movement, index, array) => {
+  const message =
+    movement > 0
+      ? `You deposited: ${movement}`
+      : `You withdrew: ${Math.abs(movement)}`;
+
+  console.log(`${index + 1} ${message}`);
+});
+
+// Maps and Sets
+const currencies = new Map([
+  ['USD', 'United States dollar'],
+  ['EUR', 'Euro'],
+  ['GBP', 'Pound sterling'],
+]);
+
+currencies.forEach(function (value, key, map) {
+  console.log(key, value);
+});
+
+// Set
+const currenciesUnique = new Set(['USD', 'EUR', 'GBP', 'RUB', 'EUR', 'USD']);
+
+currenciesUnique.forEach(function (value, key, map) {
+  console.log(key, value);
+});
